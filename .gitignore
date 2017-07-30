@@ -37,12 +37,8 @@ pip-log.txt
 ## paver generated files
 /paver-minilib.zip
 
-
 ## IDEs
 .idea
-
-## Virtual Environments
-env
 
 # Following rules comes from
 # https://github.com/github/gitignore/blob/master/Python.gitignore
