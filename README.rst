@@ -5,9 +5,8 @@
 Changes: 
 
 * Enhanced ``.gitignore``.
-* Replaced ``flake8`` with ``pep8``.
-* Changed default supported python version to ``py27`` and ``py34``.
-* Removed code for demonstration.
+* Changed default supported python version to ``py27`` and ``py35``.
+* Some bug fixes
 
 
 =========================
