@@ -6,7 +6,7 @@ import sys
 import imp
 import subprocess
 
-## Python 2.6 subprocess.check_output compatibility. Thanks Greg Hewgill!
+# Python 2.6 subprocess.check_output compatibility. Thanks Greg Hewgill!
 if 'check_output' not in dir(subprocess):
     def check_output(cmd_args, *args, **kwargs):
         proc = subprocess.Popen(
@@ -18,12 +18,13 @@ if 'check_output' not in dir(subprocess):
         return out
     subprocess.check_output = check_output
 
-from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
-from distutils import spawn
+from setuptools import setup, find_packages    # noqa
+from setuptools.command.test import test as TestCommand    # noqa
+from distutils import spawn  # noqa
 
 try:
     import colorama
+
     colorama.init()  # Initialize colorama on Windows
 except ImportError:
     # Don't require colorama just for running paver tasks. This allows us to
@@ -34,11 +35,13 @@ except ImportError:
 # Add the current directory to the module search path.
 sys.path.insert(0, os.path.abspath('.'))
 
-## Constants
+# Constants
 CODE_DIRECTORY = '$package'
 DOCS_DIRECTORY = 'docs'
 TESTS_DIRECTORY = 'tests'
 PYTEST_FLAGS = ['--doctest-modules']
+
+use_flake8 = True
 
 # Import metadata. Normally this would just be:
 #
@@ -55,7 +58,7 @@ metadata = imp.load_source(
     'metadata', os.path.join(CODE_DIRECTORY, 'metadata.py'))
 
 
-## Miscellaneous helper functions
+# Miscellaneous helper functions
 
 def get_project_files():
     """Retrieve a list of project files, ignoring hidden files.
@@ -168,7 +171,17 @@ def _lint():
     #   to pass a byte string to endswith.
     project_python_files = [filename for filename in get_project_files()
                             if filename.endswith(b'.py')]
-    call_args = [b'flake8', b'--max-complexity=10'] + project_python_files
+    common_args = [b'--exclude=docs/**']
+    if use_flake8:
+        call_args = \
+            [b'flake8', b'--max-complexity=10'] \
+            + common_args \
+            + project_python_files
+    else:
+        call_args = \
+            [b'pep8', b'--statistics'] \
+            + common_args \
+            + project_python_files
     call_args = list(map(bytes.decode, call_args))
     retcode = subprocess.call(call_args)
     if retcode == 0:
@@ -182,7 +195,7 @@ def _test():
     :return: exit code
     """
     # Make sure to import pytest in this function. For the reason, see here:
-    # <http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands>  # NOPEP8
+    # <http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands>  # noqa
     import pytest
     # This runs the unit tests.
     # It also runs doctest, but only on the modules in TESTS_DIRECTORY.
@@ -202,7 +215,7 @@ def _test_all():
 # Setuptools' automatic run of 2to3 on the source code. The recommended way to
 # run tests is still `paver test_all'.
 # See <http://pythonhosted.org/setuptools/python3.html>
-# Code based on <http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands>  # NOPEP8
+# Code based on <http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands>  # noqa
 class TestAllCommand(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -254,14 +267,15 @@ setup_dict = dict(
         'Topic :: System :: Software Distribution',
     ],
     packages=find_packages(exclude=(TESTS_DIRECTORY,)),
-    install_requires=[
+    install_requires=([
+        '',
         # your module dependencies
-    ] + python_version_specific_requires,
+    ]) + python_version_specific_requires,
     # Allow tests to be run with `python setup.py test'.
     tests_require=[
-        'pytest==2.5.1',
-        'mock==1.0.1',
-        'flake8==2.1.0',
+        'pytest==3.1.3',
+        'mock==2.0.0',
+        'flake8==3.4.1',
     ],
     cmdclass={'test': TestAllCommand},
     zip_safe=False,  # don't use eggs
