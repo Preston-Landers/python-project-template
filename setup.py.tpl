@@ -277,6 +277,7 @@ setup_dict = dict(
         '',
         # your module dependencies
     ]) + python_version_specific_requires,
+
     # Allow tests to be run with `python setup.py test'.
     tests_require=[
         'pytest==3.1.3',
