@@ -41,7 +41,7 @@ DOCS_DIRECTORY = 'docs'
 TESTS_DIRECTORY = 'tests'
 PYTEST_FLAGS = ['--doctest-modules']
 
-use_flake8 = True
+use_flake8 = False
 
 # Import metadata. Normally this would just be:
 #
@@ -179,7 +179,7 @@ def _lint():
             + project_python_files
     else:
         call_args = \
-            [b'pep8', b'--statistics'] \
+            [b'pycodestyle', b'--statistics'] \
             + common_args \
             + project_python_files
     call_args = list(map(bytes.decode, call_args))
@@ -238,6 +238,9 @@ if sys.version_info < (2, 7) or (3, 0) <= sys.version_info < (3, 3):
 if sys.version_info < (3, 3):
     python_version_specific_requires.append('enum')
 
+if sys.version_info < (3, 0):
+    python_version_specific_requires.append('configparser')
+
 
 # See here for more options:
 # <http://pythonhosted.org/setuptools/setuptools.html>
@@ -278,7 +281,8 @@ setup_dict = dict(
     tests_require=[
         'pytest==3.1.3',
         'mock==2.0.0',
-        'flake8==3.4.1',
+        # 'flake8==3.4.1',
+        'pycodestyle==2.3.1',
     ],
     cmdclass={'test': TestAllCommand},
     zip_safe=False,  # don't use eggs
