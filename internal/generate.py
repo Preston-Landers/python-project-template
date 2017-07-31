@@ -10,12 +10,11 @@ import os
 import os.path
 import shutil
 import stat
-from string import Template
-import sys
 import subprocess
+import sys
+from string import Template
 
-
-## Python 2.6 subprocess.check_output compatibility. Thanks Greg Hewgill!
+# Python 2.6 subprocess.check_output compatibility. Thanks Greg Hewgill!
 if 'check_output' not in dir(subprocess):
     def check_output(cmd_args, *args, **kwargs):
         proc = subprocess.Popen(
@@ -25,6 +24,8 @@ if 'check_output' not in dir(subprocess):
         if proc.returncode != 0:
             raise subprocess.CalledProcessError(args)
         return out
+
+
     subprocess.check_output = check_output
 
 
