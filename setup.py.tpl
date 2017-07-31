@@ -235,6 +235,9 @@ python_version_specific_requires = []
 if sys.version_info < (2, 7) or (3, 0) <= sys.version_info < (3, 3):
     python_version_specific_requires.append('argparse')
 
+if sys.version_info < (3, 3):
+    python_version_specific_requires.append('enum')
+
 
 # See here for more options:
 # <http://pythonhosted.org/setuptools/setuptools.html>
