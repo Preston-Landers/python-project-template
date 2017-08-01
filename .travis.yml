@@ -1,5 +1,4 @@
 language: python
-dist: precise
 matrix:
     include:
      - python: 2.6
